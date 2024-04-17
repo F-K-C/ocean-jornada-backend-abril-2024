@@ -36,4 +36,13 @@ app.post('/item', function(req, res){
   res.send('Item adicionado com sucesso ' + item)
 })
 
+app.put('/item/:id', function(req, res){
+  const id = req.params.id
+
+  const novoItem = req.body.nome
+
+  lista[id-1] = novoItem
+  res.send('Item atualizado com sucesso: ' + id + '. ' + novoItem)
+})
+
 app.listen(3000)
