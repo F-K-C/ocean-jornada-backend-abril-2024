@@ -18,4 +18,22 @@ app.get('/item', function(req, res) {
   res.send(lista)
 })
 
+app.get('/item/:id', function(req, res){
+  const id = req.params.id
+
+  const item = lista[id-1]
+
+  res.send(item)
+})
+
+app.use(express.json())
+
+app.post('/item', function(req, res){
+  const item = req.body.nome
+
+  lista.push(item)
+
+  res.send('Item adicionado com sucesso ' + item)
+})
+
 app.listen(3000)
