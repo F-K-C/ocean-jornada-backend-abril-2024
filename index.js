@@ -1,5 +1,5 @@
 const express = require('express')
-const { MongoClient } = require('mongodb')
+const { MongoClient, ObjectId } = require('mongodb')
 const app = express()
 
 const dbUrl = 'mongodb+srv://admin:hTmfp98MZ6vhhtew@cluster0.ffmddji.mongodb.net'
@@ -33,22 +33,22 @@ app.get('/item', async function(req, res) {
   res.send(itens)
 })
 
-app.get('/item/:id', function(req, res){
+app.get('/item/:id', async function(req, res){
   const id = req.params.id
 
-  const item = lista[id-1]
+  const item = await collection.findOne({ _id: new ObjectId(id) })
 
   res.send(item)
 })
 
 app.use(express.json())
 
-app.post('/item', function(req, res){
-  const item = req.body.nome
+app.post('/item', async function(req, res){
+  const item = req.body
 
-  lista.push(item)
+  await collection.insertOne(item)
 
-  res.send('Item adicionado com sucesso ' + item)
+  res.send(item)
 })
 
 app.put('/item/:id', function(req, res){
