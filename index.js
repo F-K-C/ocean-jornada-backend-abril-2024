@@ -54,10 +54,14 @@ app.post('/item', async function(req, res){
 app.put('/item/:id', function(req, res){
   const id = req.params.id
 
-  const novoItem = req.body.nome
+  const novoItem = req.body
 
-  lista[id-1] = novoItem
-  res.send('Item atualizado com sucesso: ' + id + '. ' + novoItem)
+  collection.updateOne(
+    { _id: new ObjectId(id) },
+    { $set: novoItem }
+  )
+
+  res.send('Item atualizado com sucesso: ' + id)
 })
 
 app.delete('/item/:id', function(req, res){
