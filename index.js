@@ -83,8 +83,10 @@ app.put('/item/:id', async function(req, res){
 app.delete('/item/:id', async function(req, res){
   const id = req.params.id
 
-  await collection.deleteOne({ _id: new ObjectId(id) })
-
+  const deleteResult = await collection.deleteOne({ _id: new ObjectId(id) })
+  if(deleteResult.deletedCount === 0){
+    return res.status(404).send("Item não encontrado")
+  }
   res.send('Item removido com sucesso: ' + id)
 })
 
