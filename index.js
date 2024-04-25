@@ -51,20 +51,31 @@ app.use(express.json())
 app.post('/item', async function(req, res){
   const item = req.body
 
+  if(!item.nome) {
+    return res.status(400).send("Corpo da requisição sem o campo 'nome'.")
+  }
+
   await collection.insertOne(item)
 
-  res.send(item)
+  res.status(201).send(item)
 })
 
-app.put('/item/:id', function(req, res){
+app.put('/item/:id', async function(req, res){
   const id = req.params.id
 
   const novoItem = req.body
+  if(!novoItem.nome){
+    return res.status(400).send("Corpo da requisição sem o campo 'nome' ")
+  }
 
-  collection.updateOne(
+  const teste = await collection.updateOne(
     { _id: new ObjectId(id) },
     { $set: novoItem }
   )
+
+ if(updateResult.matchedCount == 0){
+  return res.status(400).send("Item não encontrado. ")
+ }
 
   res.send('Item atualizado com sucesso: ' + id)
 })
